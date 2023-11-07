@@ -29,6 +29,7 @@ class Back4AppHelper {
         }).toList();
       }
     } catch (E) {
+      print(E.toString());
       print("Error while Getting Tasks from Backend");
     }
     return TasksList;
@@ -43,7 +44,7 @@ class Back4AppHelper {
       final ParseResponse apiResponse = await queryPerson.query();
       if (apiResponse.results != null) {
         task = apiResponse.result;
-        print(task);
+        //print("tasks" + task!);
       }
     } catch (E) {
       print("Error while Getting Tasks from Backend");
@@ -57,8 +58,20 @@ class Back4AppHelper {
     final toUpdateTask = ParseObject('Task')..set('todoId', id);
     toUpdateTask.set('title', title);
     toUpdateTask.set('description', description);
-    toUpdateTask.save();
+    toUpdateTask.set('completed', false);
+    await toUpdateTask.save();
     return id;
+  }
+
+  static Future<void> updateStatusInTask(
+      int id, String title, String desc, bool completed) async {
+    final toUpdateTask = QueryBuilder(ParseObject('Task'))
+      ..whereEqualTo('todoId', id);
+
+    final ParseResponse apiResponse = await toUpdateTask.query();
+    final ParseObject obj = apiResponse.result.first;
+    obj.set('completed', completed);
+    await obj.save();
   }
 
   // Delete an task
