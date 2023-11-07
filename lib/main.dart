@@ -37,6 +37,7 @@ class _FinalViewState extends State<FinalView> {
 
   @override
   Widget build(BuildContext context) {
+    //refreshData();
     var size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0xffFFFDFF),
@@ -61,98 +62,121 @@ class _FinalViewState extends State<FinalView> {
                 ),
                 allData.isEmpty
                     ? Expanded(
-                        child: Image.asset(
-                          'images/add_tasks.png',
-                          width: size.width * 0.85,
+                        child: Center(
+                          child: Image.asset(
+                            alignment: Alignment.topCenter,
+                            'images/add_tasks.png',
+                            width: size.width * 0.75,
+                          ),
                         ),
                       )
                     : Expanded(
                         child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: allData.length,
-                          itemBuilder: (context, index) => Slidable(
-                            key: const ValueKey(0),
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              extentRatio: 0.3,
-                              children: [
-                                SlidableAction(
-                                  flex: 3,
-                                  onPressed: (_) =>
-                                      deleteItem(allData[index].todoId),
-                                  foregroundColor: Colors.red,
-                                  icon: Icons.delete,
-                                  label: 'Remove',
-                                  autoClose: true,
-                                ),
-                              ],
-                            ),
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: 110,
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 1,
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: allData.length,
+                            itemBuilder: (context, index) => GestureDetector(
+                                  onLongPress: () {
+                                    createTask(allData[index].todoId);
+                                  },
+                                  child: Slidable(
+                                    key: const ValueKey(0),
+                                    endActionPane: ActionPane(
+                                      motion: const ScrollMotion(),
+                                      extentRatio: 0.3,
                                       children: [
-                                        IconButton(
-                                          onPressed: () =>
-                                              createTask(allData[index].todoId),
-                                          icon: const Icon(
-                                            Icons.edit,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        const Text(
-                                          "Edit",
-                                          style: TextStyle(color: Colors.grey),
+                                        SlidableAction(
+                                          flex: 3,
+                                          onPressed: (_) =>
+                                              deleteItem(allData[index].todoId),
+                                          foregroundColor: Colors.red,
+                                          icon: Icons.delete,
+                                          label: 'Remove',
+                                          autoClose: true,
                                         ),
                                       ],
                                     ),
-                                  ),
-                                  Expanded(
-                                    flex: 5,
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(15)),
-                                      color: Colors.deepPurpleAccent
-                                          .withOpacity(0.5),
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 8, vertical: 5),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            bottom: 12, left: 12),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              allData[index].title,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 30),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      height: 90,
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            flex: 1,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                IconButton(
+                                                  onPressed: () {
+                                                    updateStatus(index);
+                                                  },
+                                                  icon: Icon(
+                                                    allData[index].completed
+                                                        ? Icons.check_box
+                                                        : Icons
+                                                            .check_box_outline_blank,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              allData[index].description,
-                                              style: const TextStyle(
-                                                  color: Colors.white),
+                                          ),
+                                          Expanded(
+                                            flex: 5,
+                                            child: Card(
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15)),
+                                              color: Colors.deepPurpleAccent
+                                                  .withOpacity(0.5),
+                                              margin:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 5),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    bottom: 12, left: 12),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.end,
+                                                  children: [
+                                                    Text(
+                                                      allData[index].title,
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 30,
+                                                          decoration: allData[
+                                                                      index]
+                                                                  .completed
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null),
+                                                    ),
+                                                    Text(
+                                                      allData[index]
+                                                          .description,
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          decoration: allData[
+                                                                      index]
+                                                                  .completed
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                                )),
                       ),
               ],
             ),
@@ -191,7 +215,7 @@ class _FinalViewState extends State<FinalView> {
           top: 15,
           left: 15,
           right: 15,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 200,
+          bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -294,6 +318,18 @@ class _FinalViewState extends State<FinalView> {
   Future<void> updateItem(int id) async {
     await Back4AppHelper.updateTask(
         id, _titleController.text, _descriptionController.text);
+    refreshData();
+  }
+
+  Future<void> updateStatus(int index) async {
+    setState(() {
+      allData[index].completed = !allData[index].completed;
+    });
+    await Back4AppHelper.updateStatusInTask(
+        allData[index].todoId,
+        allData[index].title,
+        allData[index].description,
+        allData[index].completed);
     refreshData();
   }
 
