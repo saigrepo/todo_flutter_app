@@ -65,7 +65,6 @@ class Back4AppHelper {
 
   static Future<void> updateStatusInTask(
       int id, String title, String desc, bool completed) async {
-    print(id);
     final toUpdateTask = QueryBuilder(ParseObject('Task'))
       ..whereEqualTo('todoId', id);
 
