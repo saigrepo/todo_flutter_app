@@ -166,7 +166,9 @@ class _FinalViewState extends State<FinalView> {
                                                       allData[index].title,
                                                       style: TextStyle(
                                                           color: textColor,
-                                                          fontSize: 30,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 20,
                                                           decoration: allData[
                                                                       index]
                                                                   .completed
@@ -179,6 +181,8 @@ class _FinalViewState extends State<FinalView> {
                                                           .description,
                                                       style: TextStyle(
                                                           color: textColor,
+                                                          fontWeight:
+                                                              FontWeight.w300,
                                                           decoration: allData[
                                                                       index]
                                                                   .completed
