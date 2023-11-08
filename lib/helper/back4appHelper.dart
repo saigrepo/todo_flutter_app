@@ -1,8 +1,10 @@
+import 'package:logger/logger.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import '../model/Task.dart';
 
 class Back4AppHelper {
+  static Logger log = Logger();
   // Create new item
   static Future<int> createItem(String title, String? description) async {
     int todoId = DateTime.now().millisecondsSinceEpoch;
@@ -29,8 +31,7 @@ class Back4AppHelper {
         }).toList();
       }
     } catch (E) {
-      print(E.toString());
-      print("Error while Getting Tasks from Backend");
+      log.i('Error while Getting Tasks from Backend');
     }
     return TasksList;
   }
@@ -44,10 +45,9 @@ class Back4AppHelper {
       final ParseResponse apiResponse = await queryPerson.query();
       if (apiResponse.results != null) {
         task = apiResponse.result;
-        //print("tasks" + task!);
       }
     } catch (E) {
-      print("Error while Getting Tasks from Backend");
+      log.i("Error while Getting Tasks from Backend");
     }
     return task;
   }
@@ -55,11 +55,15 @@ class Back4AppHelper {
   // Update an task by id
   static Future<int> updateTask(
       int id, String title, String? description) async {
-    final toUpdateTask = ParseObject('Task')..set('todoId', id);
-    toUpdateTask.set('title', title);
-    toUpdateTask.set('description', description);
-    toUpdateTask.set('completed', false);
-    await toUpdateTask.save();
+    final toUpdateTask = QueryBuilder(ParseObject('Task'))
+      ..whereEqualTo('todoId', id);
+
+    final ParseResponse apiResponse = await toUpdateTask.query();
+    final ParseObject obj = apiResponse.result.first;
+    obj.set('title', title);
+    obj.set('description', description);
+    obj.set('completed', false);
+    await obj.save();
     return id;
   }
 

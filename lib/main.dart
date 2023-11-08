@@ -33,14 +33,29 @@ class _FinalViewState extends State<FinalView> {
   final TextEditingController _descriptionController = TextEditingController();
 
   List<Task> allData = [];
+  List<Task> pendingTask = [];
+
+  var appBarColor = const Color(0xFFe5666d);
+  var appBackground = const Color(0xFFeefcfb);
+  var textColor = const Color(0xFF062321);
+  var cardColor = const Color(0xFFb9f3f0);
+  var deleteIcon = const Color(0xFFc02129);
+  var cardColorInv = const Color(0xFFDC464D);
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 1));
+    refreshData();
+  }
+
   bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
-    //refreshData();
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xffFFFDFF),
+      backgroundColor: appBackground,
       appBar: _AppBar(),
       body: isLoading
           ? Center(
@@ -53,11 +68,13 @@ class _FinalViewState extends State<FinalView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Pending Tasks ${allData.isNotEmpty ? "(${allData.length})" : " "}",
+                  pendingTask.isNotEmpty
+                      ? "Pending Tasks (${pendingTask.length})"
+                      : "No Pending Tasks ",
                   style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 25,
+                    color: Color(0xFF062321),
                   ),
                 ),
                 allData.isEmpty
@@ -88,7 +105,8 @@ class _FinalViewState extends State<FinalView> {
                                           flex: 3,
                                           onPressed: (_) =>
                                               deleteItem(allData[index].todoId),
-                                          foregroundColor: Colors.red,
+                                          foregroundColor: deleteIcon,
+                                          backgroundColor: appBackground,
                                           icon: Icons.delete,
                                           label: 'Remove',
                                           autoClose: true,
@@ -115,7 +133,7 @@ class _FinalViewState extends State<FinalView> {
                                                         ? Icons.check_box
                                                         : Icons
                                                             .check_box_outline_blank,
-                                                    color: Colors.grey,
+                                                    color: appBarColor,
                                                   ),
                                                 ),
                                               ],
@@ -128,8 +146,9 @@ class _FinalViewState extends State<FinalView> {
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           15)),
-                                              color: Colors.deepPurpleAccent
-                                                  .withOpacity(0.5),
+                                              color: !allData[index].completed
+                                                  ? cardColor
+                                                  : cardColorInv,
                                               margin:
                                                   const EdgeInsets.symmetric(
                                                       horizontal: 8,
@@ -146,7 +165,7 @@ class _FinalViewState extends State<FinalView> {
                                                     Text(
                                                       allData[index].title,
                                                       style: TextStyle(
-                                                          color: Colors.white,
+                                                          color: textColor,
                                                           fontSize: 30,
                                                           decoration: allData[
                                                                       index]
@@ -159,7 +178,7 @@ class _FinalViewState extends State<FinalView> {
                                                       allData[index]
                                                           .description,
                                                       style: TextStyle(
-                                                          color: Colors.white,
+                                                          color: textColor,
                                                           decoration: allData[
                                                                       index]
                                                                   .completed
@@ -227,7 +246,7 @@ class _FinalViewState extends State<FinalView> {
             Text(
               id == null ? 'Add New Task!' : 'Update The Task',
               style: const TextStyle(
-                color: Colors.black,
+                color: Color(0xFF062321),
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
@@ -272,17 +291,14 @@ class _FinalViewState extends State<FinalView> {
                     borderRadius: BorderRadius.circular(9),
                   ),
                 ),
-                backgroundColor: MaterialStateProperty.all(
-                    Colors.deepPurpleAccent.withOpacity(.5)),
+                backgroundColor: MaterialStateProperty.all(appBarColor),
               ),
               onPressed: () async {
                 if (id == null) {
-                  print('add tasks');
                   await addItem();
                 }
 
                 if (id != null) {
-                  print('update tasks');
                   await updateItem(id);
                 }
 
@@ -304,6 +320,7 @@ class _FinalViewState extends State<FinalView> {
     final data = await Back4AppHelper.getTasks();
     setState(() {
       allData = data;
+      pendingTask = allToPendingTask(allData);
       isLoading = false;
     });
   }
@@ -336,8 +353,15 @@ class _FinalViewState extends State<FinalView> {
   // ignore: non_constant_identifier_names
   AppBar _AppBar() {
     return AppBar(
-      backgroundColor: Colors.deepPurpleAccent,
-      title: const Text("My Tasks"),
+      backgroundColor: appBarColor,
+      title: const Text(
+        "My Tasks",
+        textAlign: TextAlign.right,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 30,
+        ),
+      ),
     );
   }
 
@@ -361,12 +385,16 @@ class _FinalViewState extends State<FinalView> {
     refreshData();
   }
 
+  List<Task> allToPendingTask(List<Task> allData) {
+    return allData.where((element) => !element.completed).toList();
+  }
+
   Widget _buildFAB() {
     return SizedBox(
       width: 220,
       child: FloatingActionButton(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        backgroundColor: const Color.fromARGB(255, 164, 132, 250),
+        backgroundColor: appBarColor,
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
