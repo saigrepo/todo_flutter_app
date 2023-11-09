@@ -33,8 +33,10 @@ class FinalView extends StatefulWidget {
 class _FinalViewState extends State<FinalView> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   List<Task> allData = [];
+  List<Task> searchData = [];
   List<Task> pendingTask = [];
 
   var appBarColor = const Color(0xFFe5666d);
@@ -46,14 +48,9 @@ class _FinalViewState extends State<FinalView> {
 
   @override
   void initState() {
-    super.initState();
-    Future.delayed(const Duration(milliseconds: 1));
+    //Future.delayed(const Duration(milliseconds: 1));
     refreshData();
-    if (allData.isEmpty) {
-      setState(() {
-        isLoading = true;
-      });
-    }
+    super.initState();
   }
 
   bool isLoading = true;
@@ -69,6 +66,7 @@ class _FinalViewState extends State<FinalView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            searchBox(),
             allData.isEmpty
                 ? Expanded(
                     child: Center(
@@ -81,10 +79,10 @@ class _FinalViewState extends State<FinalView> {
                 : Expanded(
                     child: ListView.builder(
                         physics: const BouncingScrollPhysics(),
-                        itemCount: allData.length,
+                        itemCount: searchData.length,
                         itemBuilder: (context, index) => GestureDetector(
                               onLongPress: () {
-                                createTask(allData[index].todoId);
+                                createTask(searchData[index].todoId);
                               },
                               child: Slidable(
                                 key: const ValueKey(0),
@@ -95,7 +93,7 @@ class _FinalViewState extends State<FinalView> {
                                     SlidableAction(
                                       flex: 3,
                                       onPressed: (_) =>
-                                          deleteItem(allData[index].todoId),
+                                          deleteItem(searchData[index].todoId),
                                       foregroundColor: deleteIcon,
                                       backgroundColor: appBackground,
                                       icon: Icons.delete,
@@ -120,7 +118,7 @@ class _FinalViewState extends State<FinalView> {
                                                 updateStatus(index);
                                               },
                                               icon: Icon(
-                                                allData[index].completed
+                                                searchData[index].completed
                                                     ? Icons.check_box
                                                     : Icons
                                                         .check_box_outline_blank,
@@ -136,7 +134,7 @@ class _FinalViewState extends State<FinalView> {
                                           shape: RoundedRectangleBorder(
                                               borderRadius:
                                                   BorderRadius.circular(15)),
-                                          color: !allData[index].completed
+                                          color: !searchData[index].completed
                                               ? cardColor
                                               : cardColorInv,
                                           margin: const EdgeInsets.symmetric(
@@ -151,29 +149,31 @@ class _FinalViewState extends State<FinalView> {
                                                   MainAxisAlignment.end,
                                               children: [
                                                 Text(
-                                                  allData[index].title,
+                                                  searchData[index].title,
                                                   style: TextStyle(
                                                       color: textColor,
                                                       fontWeight:
                                                           FontWeight.w700,
                                                       fontSize: 20,
-                                                      decoration: allData[index]
-                                                              .completed
-                                                          ? TextDecoration
-                                                              .lineThrough
-                                                          : null),
+                                                      decoration:
+                                                          searchData[index]
+                                                                  .completed
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null),
                                                 ),
                                                 Text(
-                                                  allData[index].description,
+                                                  searchData[index].description,
                                                   style: TextStyle(
                                                       color: textColor,
                                                       fontWeight:
                                                           FontWeight.w300,
-                                                      decoration: allData[index]
-                                                              .completed
-                                                          ? TextDecoration
-                                                              .lineThrough
-                                                          : null),
+                                                      decoration:
+                                                          searchData[index]
+                                                                  .completed
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null),
                                                 ),
                                               ],
                                             ),
@@ -312,6 +312,7 @@ class _FinalViewState extends State<FinalView> {
     setState(() {
       allData = data;
       pendingTask = allToPendingTask(allData);
+      searchData = data;
       isLoading = false;
     });
   }
@@ -472,5 +473,45 @@ class _FinalViewState extends State<FinalView> {
         onPressed: () => createTask(null),
       ),
     );
+  }
+
+  Widget searchBox() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: BoxDecoration(
+        color: appBackground,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextField(
+        onChanged: (value) => _runFilter(value),
+        controller: _searchController,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(0),
+          prefixIcon: Icon(
+            Icons.search,
+            color: textColor,
+            size: 20,
+          ),
+          prefixIconConstraints: const BoxConstraints(
+            maxHeight: 20,
+            minWidth: 25,
+          ),
+          border: InputBorder.none,
+          hintText: 'Search',
+          hintStyle: const TextStyle(color: Colors.grey),
+        ),
+      ),
+    );
+  }
+
+  void _runFilter(String enteredKeyword) {
+    if (enteredKeyword.isEmpty) {}
+    //List<Task> tas = Back4AppHelper.getTasks() as List<Task>;
+    setState(() {
+      searchData = allData
+          .where((item) =>
+              item.title.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+    });
   }
 }
