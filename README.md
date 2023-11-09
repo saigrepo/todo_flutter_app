@@ -36,7 +36,7 @@
 
 ## About The Project
 
-![Screen Shot]
+<b>![Screen Shots]<b>
 <img src=https://github.com/S-Depot/todo_flutter_app/blob/main/images/git/AppWithTasks.png width="20%" height="20%">
 <img src=https://github.com/S-Depot/todo_flutter_app/blob/main/images/git/AppWithoutTask.png width="20%" height="20%">
 
