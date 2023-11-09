@@ -86,4 +86,23 @@ class Back4AppHelper {
     final deletedObject = response.results!.first;
     await deletedObject.delete();
   }
+
+  static Future<void> deleteTasks(bool completed) async {
+    final deleteQuery = QueryBuilder(ParseObject('Task'))
+      ..whereEqualTo('completed', completed);
+    final response = await deleteQuery.query();
+    final deletedObject = response.results as List;
+    for (var delobj in deletedObject) {
+      await delobj.delete();
+    }
+  }
+
+  static Future<void> deleteAllTasks() async {
+    final deleteQuery = QueryBuilder(ParseObject('Task'));
+    final response = await deleteQuery.query();
+    final deletedObject = response.results as List;
+    for (var delobj in deletedObject) {
+      await delobj.delete();
+    }
+  }
 }
