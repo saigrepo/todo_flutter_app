@@ -8,8 +8,8 @@ import 'helper/back4appHelper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const keyApplicationId = 'qspCwmJE1jrwykvq1UPZP8aOImKnEaG2Jzwim2IE';
-  const keyClientKey = 'zYpTOlDwHaR5nHN5NFNsz8fXH4Q5pPZz8h8HIvp8';
+  const keyApplicationId = 'Add Application ID';
+  const keyClientKey = 'Add Cient Key';
   const keyParseServerUrl = 'https://parseapi.back4app.com';
   await Parse().initialize(keyApplicationId, keyParseServerUrl,
       clientKey: keyClientKey, debug: true);
@@ -47,6 +47,11 @@ class _FinalViewState extends State<FinalView> {
     super.initState();
     Future.delayed(const Duration(milliseconds: 1));
     refreshData();
+    if (allData.isEmpty) {
+      setState(() {
+        isLoading = true;
+      });
+    }
   }
 
   bool isLoading = true;
@@ -57,152 +62,141 @@ class _FinalViewState extends State<FinalView> {
     return Scaffold(
       backgroundColor: appBackground,
       appBar: _AppBar(),
-      body: isLoading
-          ? Center(
-              child: Image.asset(
-                'images/add_tasks.png',
-                width: size.width * 0.85,
-              ),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  pendingTask.isNotEmpty
-                      ? "Pending Tasks (${pendingTask.length})"
-                      : "No Pending Tasks ",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 25,
-                    color: Color(0xFF062321),
-                  ),
-                ),
-                allData.isEmpty
-                    ? Expanded(
-                        child: Center(
-                          child: Image.asset(
-                            alignment: Alignment.topCenter,
-                            'images/add_tasks.png',
-                            width: size.width * 0.75,
-                          ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          allData.isEmpty
+              ? Expanded(
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Image.asset(
+                          'images/add_tasks.png',
+                          width: size.width * 0.85,
                         ),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: allData.length,
-                            itemBuilder: (context, index) => GestureDetector(
-                                  onLongPress: () {
-                                    createTask(allData[index].todoId);
-                                  },
-                                  child: Slidable(
-                                    key: const ValueKey(0),
-                                    endActionPane: ActionPane(
-                                      motion: const ScrollMotion(),
-                                      extentRatio: 0.3,
-                                      children: [
-                                        SlidableAction(
-                                          flex: 3,
-                                          onPressed: (_) =>
-                                              deleteItem(allData[index].todoId),
-                                          foregroundColor: deleteIcon,
-                                          backgroundColor: appBackground,
-                                          icon: Icons.delete,
-                                          label: 'Remove',
-                                          autoClose: true,
-                                        ),
-                                      ],
-                                    ),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      height: 90,
-                                      child: Row(
+                      ),
+                      const Text(
+                        "Tell me about YOUR Tasks",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 20),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      const RefreshProgressIndicator(
+                        backgroundColor: Color(0xFFeefcfb),
+                      ),
+                    ],
+                  ),
+                )
+              : Expanded(
+                  child: ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: allData.length,
+                      itemBuilder: (context, index) => GestureDetector(
+                            onLongPress: () {
+                              createTask(allData[index].todoId);
+                            },
+                            child: Slidable(
+                              key: const ValueKey(0),
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                extentRatio: 0.3,
+                                children: [
+                                  SlidableAction(
+                                    flex: 3,
+                                    onPressed: (_) =>
+                                        deleteItem(allData[index].todoId),
+                                    foregroundColor: deleteIcon,
+                                    backgroundColor: appBackground,
+                                    icon: Icons.delete,
+                                    label: 'Remove',
+                                    autoClose: true,
+                                  ),
+                                ],
+                              ),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: 90,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 1,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                         children: [
-                                          Expanded(
-                                            flex: 1,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  onPressed: () {
-                                                    updateStatus(index);
-                                                  },
-                                                  icon: Icon(
-                                                    allData[index].completed
-                                                        ? Icons.check_box
-                                                        : Icons
-                                                            .check_box_outline_blank,
-                                                    color: appBarColor,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Expanded(
-                                            flex: 5,
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              color: !allData[index].completed
-                                                  ? cardColor
-                                                  : cardColorInv,
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 5),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 12, left: 12),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    Text(
-                                                      allData[index].title,
-                                                      style: TextStyle(
-                                                          color: textColor,
-                                                          fontWeight:
-                                                              FontWeight.w700,
-                                                          fontSize: 20,
-                                                          decoration: allData[
-                                                                      index]
-                                                                  .completed
-                                                              ? TextDecoration
-                                                                  .lineThrough
-                                                              : null),
-                                                    ),
-                                                    Text(
-                                                      allData[index]
-                                                          .description,
-                                                      style: TextStyle(
-                                                          color: textColor,
-                                                          fontWeight:
-                                                              FontWeight.w300,
-                                                          decoration: allData[
-                                                                      index]
-                                                                  .completed
-                                                              ? TextDecoration
-                                                                  .lineThrough
-                                                              : null),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                          IconButton(
+                                            onPressed: () {
+                                              updateStatus(index);
+                                            },
+                                            icon: Icon(
+                                              allData[index].completed
+                                                  ? Icons.check_box
+                                                  : Icons
+                                                      .check_box_outline_blank,
+                                              color: appBarColor,
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                  ),
-                                )),
-                      ),
-              ],
-            ),
+                                    Expanded(
+                                      flex: 5,
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        color: !allData[index].completed
+                                            ? cardColor
+                                            : cardColorInv,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 5),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              bottom: 12, left: 12),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                allData[index].title,
+                                                style: TextStyle(
+                                                    color: textColor,
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 20,
+                                                    decoration:
+                                                        allData[index].completed
+                                                            ? TextDecoration
+                                                                .lineThrough
+                                                            : null),
+                                              ),
+                                              Text(
+                                                allData[index].description,
+                                                style: TextStyle(
+                                                    color: textColor,
+                                                    fontWeight: FontWeight.w300,
+                                                    decoration:
+                                                        allData[index].completed
+                                                            ? TextDecoration
+                                                                .lineThrough
+                                                            : null),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          )),
+                ),
+        ],
+      ),
       floatingActionButton: _buildFAB(),
     );
   }
@@ -358,12 +352,16 @@ class _FinalViewState extends State<FinalView> {
   AppBar _AppBar() {
     return AppBar(
       backgroundColor: appBarColor,
-      title: const Text(
-        "My Tasks",
-        textAlign: TextAlign.right,
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 30,
+      title: const SizedBox(
+        child: Center(
+          child: Text(
+            "My Tasks",
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontStyle: FontStyle.italic,
+              fontSize: 30,
+            ),
+          ),
         ),
       ),
     );
