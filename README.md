@@ -12,12 +12,10 @@
     <br/>
     <a href="https://github.com/S-Depot/todo_flutter_app">View Demo</a>
   </p>
-  <p align="center">
-  ![Downloads](https://img.shields.io/github/downloads/S-Depot/todo_flutter_app/total) ![Contributors](https://img.shields.io/github/contributors/S-Depot/todo_flutter_app?color=dark-green) ![Forks](https://img.shields.io/github/forks/S-Depot/todo_flutter_app?style=social) ![Stargazers](https://img.shields.io/github/stars/S-Depot/todo_flutter_app?style=social) ![Issues](https://img.shields.io/github/issues/S-Depot/todo_flutter_app) 
-  </p>
 </p>
 
 
+![Downloads](https://img.shields.io/github/downloads/S-Depot/todo_flutter_app/total) ![Contributors](https://img.shields.io/github/contributors/S-Depot/todo_flutter_app?color=dark-green) ![Forks](https://img.shields.io/github/forks/S-Depot/todo_flutter_app?style=social) ![Stargazers](https://img.shields.io/github/stars/S-Depot/todo_flutter_app?style=social) ![Issues](https://img.shields.io/github/issues/S-Depot/todo_flutter_app) 
 
 ## Table Of Contents
 
