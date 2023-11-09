@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -8,8 +10,8 @@ import 'helper/back4appHelper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  const keyApplicationId = 'qspCwmJE1jrwykvq1UPZP8aOImKnEaG2Jzwim2IE';
-  const keyClientKey = 'zYpTOlDwHaR5nHN5NFNsz8fXH4Q5pPZz8h8HIvp8';
+  const keyApplicationId = 'Add Application ID';
+  const keyClientKey = 'ADD Client key';
   const keyParseServerUrl = 'https://parseapi.back4app.com';
   await Parse().initialize(keyApplicationId, keyParseServerUrl,
       clientKey: keyClientKey, debug: true);
@@ -31,156 +33,164 @@ class FinalView extends StatefulWidget {
 class _FinalViewState extends State<FinalView> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
 
   List<Task> allData = [];
+  List<Task> searchData = [];
+  List<Task> pendingTask = [];
+
+  var appBarColor = const Color(0xFFe5666d);
+  var appBackground = const Color(0xFFeefcfb);
+  var textColor = const Color(0xFF062321);
+  var cardColor = const Color(0xFFb9f3f0);
+  var deleteIcon = const Color(0xFFc02129);
+  var cardColorInv = const Color(0xFFDC464D);
+
+  @override
+  void initState() {
+    //Future.delayed(const Duration(milliseconds: 1));
+    refreshData();
+    super.initState();
+  }
+
   bool isLoading = true;
 
   @override
   Widget build(BuildContext context) {
-    //refreshData();
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: const Color(0xffFFFDFF),
+      backgroundColor: appBackground,
       appBar: _AppBar(),
-      body: isLoading
-          ? Center(
-              child: Image.asset(
-                'images/add_tasks.png',
-                width: size.width * 0.85,
-              ),
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Pending Tasks ${allData.isNotEmpty ? "(${allData.length})" : " "}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
-                    color: Colors.black,
-                  ),
-                ),
-                allData.isEmpty
-                    ? Expanded(
-                        child: Center(
-                          child: Image.asset(
-                            alignment: Alignment.topCenter,
-                            'images/add_tasks.png',
-                            width: size.width * 0.75,
-                          ),
-                        ),
-                      )
-                    : Expanded(
-                        child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: allData.length,
-                            itemBuilder: (context, index) => GestureDetector(
-                                  onLongPress: () {
-                                    createTask(allData[index].todoId);
-                                  },
-                                  child: Slidable(
-                                    key: const ValueKey(0),
-                                    endActionPane: ActionPane(
-                                      motion: const ScrollMotion(),
-                                      extentRatio: 0.3,
-                                      children: [
-                                        SlidableAction(
-                                          flex: 3,
-                                          onPressed: (_) =>
-                                              deleteItem(allData[index].todoId),
-                                          foregroundColor: Colors.red,
-                                          icon: Icons.delete,
-                                          label: 'Remove',
-                                          autoClose: true,
-                                        ),
-                                      ],
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            searchBox(),
+            allData.isEmpty
+                ? Expanded(
+                    child: Center(
+                      child: Image.asset(
+                        'images/add_tasks.png',
+                        width: size.width * 0.9,
+                      ),
+                    ),
+                  )
+                : Expanded(
+                    child: ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: searchData.length,
+                        itemBuilder: (context, index) => GestureDetector(
+                              onLongPress: () {
+                                createTask(searchData[index].todoId);
+                              },
+                              child: Slidable(
+                                key: const ValueKey(0),
+                                endActionPane: ActionPane(
+                                  motion: const ScrollMotion(),
+                                  extentRatio: 0.3,
+                                  children: [
+                                    SlidableAction(
+                                      flex: 3,
+                                      onPressed: (_) =>
+                                          deleteItem(searchData[index].todoId),
+                                      foregroundColor: deleteIcon,
+                                      backgroundColor: appBackground,
+                                      icon: Icons.delete,
+                                      label: 'Remove',
+                                      autoClose: true,
                                     ),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      height: 90,
-                                      child: Row(
-                                        children: [
-                                          Expanded(
-                                            flex: 1,
+                                  ],
+                                ),
+                                child: SizedBox(
+                                  width: double.infinity,
+                                  height: 90,
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                updateStatus(index);
+                                              },
+                                              icon: Icon(
+                                                searchData[index].completed
+                                                    ? Icons.check_box
+                                                    : Icons
+                                                        .check_box_outline_blank,
+                                                color: appBarColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 5,
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          color: !searchData[index].completed
+                                              ? cardColor
+                                              : cardColorInv,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 5),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 12, left: 12),
                                             child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  MainAxisAlignment.end,
                                               children: [
-                                                IconButton(
-                                                  onPressed: () {
-                                                    updateStatus(index);
-                                                  },
-                                                  icon: Icon(
-                                                    allData[index].completed
-                                                        ? Icons.check_box
-                                                        : Icons
-                                                            .check_box_outline_blank,
-                                                    color: Colors.grey,
-                                                  ),
+                                                Text(
+                                                  searchData[index].title,
+                                                  style: TextStyle(
+                                                      color: textColor,
+                                                      fontWeight:
+                                                          FontWeight.w700,
+                                                      fontSize: 20,
+                                                      decoration:
+                                                          searchData[index]
+                                                                  .completed
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null),
+                                                ),
+                                                Text(
+                                                  searchData[index].description,
+                                                  style: TextStyle(
+                                                      color: textColor,
+                                                      fontWeight:
+                                                          FontWeight.w300,
+                                                      decoration:
+                                                          searchData[index]
+                                                                  .completed
+                                                              ? TextDecoration
+                                                                  .lineThrough
+                                                              : null),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          Expanded(
-                                            flex: 5,
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15)),
-                                              color: Colors.deepPurpleAccent
-                                                  .withOpacity(0.5),
-                                              margin:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 8,
-                                                      vertical: 5),
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 12, left: 12),
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    Text(
-                                                      allData[index].title,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 30,
-                                                          decoration: allData[
-                                                                      index]
-                                                                  .completed
-                                                              ? TextDecoration
-                                                                  .lineThrough
-                                                              : null),
-                                                    ),
-                                                    Text(
-                                                      allData[index]
-                                                          .description,
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          decoration: allData[
-                                                                      index]
-                                                                  .completed
-                                                              ? TextDecoration
-                                                                  .lineThrough
-                                                              : null),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
-                                    ),
+                                    ],
                                   ),
-                                )),
-                      ),
-              ],
-            ),
+                                ),
+                              ),
+                            )),
+                  ),
+          ],
+        ),
+      ),
       floatingActionButton: _buildFAB(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -227,7 +237,7 @@ class _FinalViewState extends State<FinalView> {
             Text(
               id == null ? 'Add New Task!' : 'Update The Task',
               style: const TextStyle(
-                color: Colors.black,
+                color: Color(0xFF062321),
                 fontSize: 30,
                 fontWeight: FontWeight.bold,
               ),
@@ -272,17 +282,14 @@ class _FinalViewState extends State<FinalView> {
                     borderRadius: BorderRadius.circular(9),
                   ),
                 ),
-                backgroundColor: MaterialStateProperty.all(
-                    Colors.deepPurpleAccent.withOpacity(.5)),
+                backgroundColor: MaterialStateProperty.all(appBarColor),
               ),
               onPressed: () async {
                 if (id == null) {
-                  print('add tasks');
                   await addItem();
                 }
 
                 if (id != null) {
-                  print('update tasks');
                   await updateItem(id);
                 }
 
@@ -304,8 +311,14 @@ class _FinalViewState extends State<FinalView> {
     final data = await Back4AppHelper.getTasks();
     setState(() {
       allData = data;
+      pendingTask = allToPendingTask(allData);
+      searchData = data;
       isLoading = false;
     });
+  }
+
+  Future<void> _refresh() async {
+    refreshData();
   }
 
   Future<void> addItem() async {
@@ -335,9 +348,50 @@ class _FinalViewState extends State<FinalView> {
 
   // ignore: non_constant_identifier_names
   AppBar _AppBar() {
+    List<Task> selectedList =
+        allData.where((element) => element.completed).toList();
+    int len = selectedList.length;
     return AppBar(
-      backgroundColor: Colors.deepPurpleAccent,
-      title: const Text("My Tasks"),
+      backgroundColor: appBarColor,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          SizedBox(
+            child: Center(
+              child: Text(
+                "My Tasks",
+                style: TextStyle(
+                  foreground: Paint()
+                    ..shader = const LinearGradient(
+                      colors: [
+                        Color(0xFFC2C3C1),
+                        Color(0XFF7d7a7f),
+                      ],
+                    ).createShader(const Rect.fromLTWH(0.0, 20.0, 200.0, 70.0)),
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.normal,
+                  fontSize: 30,
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onLongPress: deleteItemAll,
+            child: FloatingActionButton(
+              onPressed: deleteItems,
+              backgroundColor: appBarColor,
+              foregroundColor: appBarColor,
+              child: Text(
+                "$len",
+                style: TextStyle(
+                    color: textColor,
+                    fontSize: 25,
+                    fontWeight: FontWeight.w300),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -361,24 +415,103 @@ class _FinalViewState extends State<FinalView> {
     refreshData();
   }
 
+  void deleteItems() async {
+    await Back4AppHelper.deleteTasks(true);
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Success!',
+        message: 'Successfully removed COMPLETED tasks',
+        messageFontSize: 15,
+        contentType: ContentType.success,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+
+    refreshData();
+  }
+
+  void deleteItemAll() async {
+    await Back4AppHelper.deleteAllTasks();
+    final snackBar = SnackBar(
+      elevation: 0,
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      content: AwesomeSnackbarContent(
+        title: 'Success!',
+        message: 'Removed All tasks',
+        messageFontSize: 15,
+        contentType: ContentType.success,
+      ),
+    );
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+
+    refreshData();
+  }
+
+  List<Task> allToPendingTask(List<Task> allData) {
+    return allData.where((element) => !element.completed).toList();
+  }
+
   Widget _buildFAB() {
     return SizedBox(
-      width: 220,
+      width: 90,
       child: FloatingActionButton(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        backgroundColor: const Color.fromARGB(255, 164, 132, 250),
-        child: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Write a new project"),
-            SizedBox(
-              width: 10,
-            ),
-            Icon(Icons.add),
-          ],
-        ),
+        hoverColor: deleteIcon,
+        hoverElevation: 20,
+        shape: const CircleBorder(side: BorderSide.none),
+        backgroundColor: appBarColor,
+        child: const Icon(Icons.add),
         onPressed: () => createTask(null),
       ),
     );
+  }
+
+  Widget searchBox() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      decoration: BoxDecoration(
+        color: appBackground,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextField(
+        onChanged: (value) => _runFilter(value),
+        controller: _searchController,
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.all(0),
+          prefixIcon: Icon(
+            Icons.search,
+            color: textColor,
+            size: 20,
+          ),
+          prefixIconConstraints: const BoxConstraints(
+            maxHeight: 20,
+            minWidth: 25,
+          ),
+          border: InputBorder.none,
+          hintText: 'Search',
+          hintStyle: const TextStyle(color: Colors.grey),
+        ),
+      ),
+    );
+  }
+
+  void _runFilter(String enteredKeyword) {
+    if (enteredKeyword.isEmpty) {}
+    //List<Task> tas = Back4AppHelper.getTasks() as List<Task>;
+    setState(() {
+      searchData = allData
+          .where((item) =>
+              item.title.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+    });
   }
 }
