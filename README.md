@@ -13,13 +13,14 @@
     <a href="https://github.com/S-Depot/todo_flutter_app">View Demo</a>
   </p>
 </p>
-<div style="text-align: justify;">
-    <img src="https://img.shields.io/github/downloads/S-Depot/todo_flutter_app/total">
-    <img src="https://img.shields.io/github/contributors/S-Depot/todo_flutter_app?color=dark-green">
-    <img src="https://img.shields.io/github/forks/S-Depot/todo_flutter_app?style=social">
-    <img src="https://img.shields.io/github/stars/S-Depot/todo_flutter_app?style=social">
-    <img src="https://img.shields.io/github/issues/S-Depot/todo_flutter_app">
+<div align="center">
+  <img src="https://img.shields.io/github/downloads/S-Depot/todo_flutter_app/total">
+  <img src="https://img.shields.io/github/contributors/S-Depot/todo_flutter_app?color=dark-green">
+  <img src="https://img.shields.io/github/forks/S-Depot/todo_flutter_app?style=social">
+  <img src="https://img.shields.io/github/stars/S-Depot/todo_flutter_app?style=social">
+  <img src="https://img.shields.io/github/issues/S-Depot/todo_flutter_app">
 </div>
+
 
 
 ## Table Of Contents
