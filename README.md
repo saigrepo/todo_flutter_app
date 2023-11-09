@@ -16,9 +16,11 @@
     <a href="https://github.com/S-Depot/todo_flutter_app">View Demo</a>
     .
   </p>
+
+  ![Downloads](https://img.shields.io/github/downloads/S-Depot/todo_flutter_app/total) ![Contributors](https://img.shields.io/github/contributors/S-Depot/todo_flutter_app?color=dark-green) ![Forks](https://img.shields.io/github/forks/S-Depot/todo_flutter_app?style=social) ![Stargazers](https://img.shields.io/github/stars/S-Depot/todo_flutter_app?style=social) ![Issues](https://img.shields.io/github/issues/S-Depot/todo_flutter_app) 
 </p>
 
-![Downloads](https://img.shields.io/github/downloads/S-Depot/todo_flutter_app/total) ![Contributors](https://img.shields.io/github/contributors/S-Depot/todo_flutter_app?color=dark-green) ![Forks](https://img.shields.io/github/forks/S-Depot/todo_flutter_app?style=social) ![Stargazers](https://img.shields.io/github/stars/S-Depot/todo_flutter_app?style=social) ![Issues](https://img.shields.io/github/issues/S-Depot/todo_flutter_app) 
+
 
 ## Table Of Contents
 
@@ -33,8 +35,9 @@
 
 ## About The Project
 
-![Screen Shot](https://github.com/S-Depot/todo_flutter_app/blob/main/images/git/AppWithTasks.png
-https://github.com/S-Depot/todo_flutter_app/blob/main/images/git/AppWithoutTask.png)
+![Screen Shot]
+<img src=https://github.com/S-Depot/todo_flutter_app/blob/main/images/git/AppWithTasks.png>
+<img src=https://github.com/S-Depot/todo_flutter_app/blob/main/images/git/AppWithoutTask.png>
 
 ## Built With
 
