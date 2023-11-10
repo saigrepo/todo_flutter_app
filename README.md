@@ -84,7 +84,7 @@ flutter run
 ## Usage
 
 <div align="center">
-    <img src="https://github.com/S-Depot/todo_flutter_app/blob/custom/images/git/AllOperations.gif" width="25%" height="25%">
+    <img src="https://github.com/S-Depot/todo_flutter_app/blob/custom/images/git/AllTasks.gif" width="25%" height="25%">
 </div>
 
 ## Authors
