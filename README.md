@@ -7,7 +7,7 @@
   <h3 align="center">Todo App</h3>
 
   <p align="center">
-    An Awesome TODO Flutter Android APP!
+    An Awesome TODO Flutter Android APP! 
     <br/>
     <br/>
     <a href="https://github.com/S-Depot/todo_flutter_app">View Demo</a>
