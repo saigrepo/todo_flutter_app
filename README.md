@@ -30,7 +30,7 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-* [Usage](#usage)
+* [Demo](#demo)
 * [Authors](#authors)
 * [Acknowledgements](#acknowledgements)
 
@@ -103,14 +103,14 @@ Select the Check box to indicate the task is completed.
 Search bar to search the required task and perfrom desired action on it
 ```
 ## Demo
-<h2>Demo of how the app works</h2>
+
+<h3>Demo of how the app works</h3>
 <hr style="width:50%;text-align:left;margin-left:0">
 <div align="center">
     <img src="https://github.com/S-Depot/todo_flutter_app/blob/custom/images/git/AllTasks.gif" width="25%" height="25%">
 </div>
 <hr style="width:50%;text-align:left;margin-left:0">
-* 
 
-**Saiganesh H** - *Software Engineering Student* - [Saiganesh H](https://github.com/S-Depot/) - *TODO Android APP
-*
+
+* **Saiganesh H** - *Software Engineering Student* - [Saiganesh H](https://github.com/S-Depot/) - *TODO Android APP*
 
