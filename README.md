@@ -105,6 +105,7 @@ Long press on the Task to Modify the Task content
 Swipe left  a task to delete it
 Long press on the selected task count indicator to delete all tasks
 Select the Check box to indicate the task is completed.
+Search bar to search the required task and perfrom desired action on it
 ```
 
 * **Saiganesh H** - *Software Engineering Student* - [Saiganesh H](https://github.com/S-Depot/) - *TODO Android APP*
