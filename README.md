@@ -30,9 +30,9 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
-* [Usage](#usage)
-* [Authors](#authors)
-* [Acknowledgements](#acknowledgements)
+* [Features](#Features)
+* [Demo](#demo)
+* [Authors](#Authors)
 
 ## About The Project
 
@@ -46,6 +46,7 @@
 ## Built With
 
 <b>Flutter</b>: Framework for building the cross-platform app.
+<br></br>
 <b>Back4App</b>: Backend service for data storage and management.
 
 ## Getting Started
@@ -80,12 +81,40 @@ const keyClientKey = 'ADD Client key';
 flutter pub get
 flutter run
 ```
+5. Commands to run app in Android mobile.
 
-## Usage
+```sh
+flutter build apk
+(The apk can be found in build/app/outputs/flutter-apk/app-release.apk )
+```
 
+## Features
+1. CRUD Operations
+
+```sh
+ADD a Task
+Modify a Task
+Delete a Task
+Delete Selected Tasks
+Delete all the Tasks
+```
+
+2. Bonus Features
+
+```sh
+Add a task by clicking on the + signed icon
+Long press on the Task to Modify the Task content
+Swipe left  a task to delete it
+Long press on the selected task count indicator to delete all tasks
+Select the Check box to indicate the task is completed.
+Search bar to search the required task and perfrom desired action on it
+```
+## Demo
+<hr style="width:50%;text-align:left;margin-left:0">
 <div align="center">
     <img src="https://github.com/S-Depot/todo_flutter_app/blob/custom/images/git/AllTasks.gif" width="25%" height="25%">
 </div>
+<hr style="width:50%;text-align:left;margin-left:0">
 
 ## Authors
 
