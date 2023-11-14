@@ -46,6 +46,7 @@
 ## Built With
 
 <b>Flutter</b>: Framework for building the cross-platform app.
+<br></br>
 <b>Back4App</b>: Backend service for data storage and management.
 
 ## Getting Started
