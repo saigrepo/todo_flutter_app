@@ -82,12 +82,30 @@ flutter run
 ```
 
 ## Usage
-
 <div align="center">
     <img src="https://github.com/S-Depot/todo_flutter_app/blob/custom/images/git/AllTasks.gif" width="25%" height="25%">
 </div>
 
-## Authors
+## CRUD Operations and Bonus Features
+1. CRUD Operations
+
+```sh
+ADD a Task
+Modify a Task
+Delete a Task
+Delete Selected Tasks
+Delete all the Tasks
+```
+
+2. Bonus Features
+
+```sh
+Add a task by clicking on the + signed icon
+Long press on the Task to Modify the Task content
+Swipe left  a task to delete it
+Long press on the selected task count indicator to delete all tasks
+Select the Check box to indicate the task is completed.
+```
 
 * **Saiganesh H** - *Software Engineering Student* - [Saiganesh H](https://github.com/S-Depot/) - *TODO Android APP*
 
