@@ -30,9 +30,9 @@
 * [Getting Started](#getting-started)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
+* [Features](#Features)
 * [Demo](#demo)
-* [Authors](#authors)
-* [Acknowledgements](#acknowledgements)
+* [Authors](#Authors)
 
 ## About The Project
 
@@ -80,8 +80,14 @@ const keyClientKey = 'ADD Client key';
 flutter pub get
 flutter run
 ```
+5. Commands to run app in Android mobile.
 
-## CRUD Operations and Bonus Features
+```sh
+flutter build apk
+(The apk can be found in build/app/outputs/flutter-apk/app-release.apk )
+```
+
+## Features
 1. CRUD Operations
 
 ```sh
@@ -103,14 +109,13 @@ Select the Check box to indicate the task is completed.
 Search bar to search the required task and perfrom desired action on it
 ```
 ## Demo
-
-<h3>Demo of how the app works</h3>
 <hr style="width:50%;text-align:left;margin-left:0">
 <div align="center">
     <img src="https://github.com/S-Depot/todo_flutter_app/blob/custom/images/git/AllTasks.gif" width="25%" height="25%">
 </div>
 <hr style="width:50%;text-align:left;margin-left:0">
 
+## Authors
 
 * **Saiganesh H** - *Software Engineering Student* - [Saiganesh H](https://github.com/S-Depot/) - *TODO Android APP*
 
