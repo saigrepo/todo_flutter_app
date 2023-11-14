@@ -81,11 +81,6 @@ flutter pub get
 flutter run
 ```
 
-## Usage
-<div align="center">
-    <img src="https://github.com/S-Depot/todo_flutter_app/blob/custom/images/git/AllTasks.gif" width="25%" height="25%">
-</div>
-
 ## CRUD Operations and Bonus Features
 1. CRUD Operations
 
@@ -107,6 +102,10 @@ Long press on the selected task count indicator to delete all tasks
 Select the Check box to indicate the task is completed.
 Search bar to search the required task and perfrom desired action on it
 ```
+## Demo
+<div align="center">
+    <img src="https://github.com/S-Depot/todo_flutter_app/blob/custom/images/git/AllTasks.gif" width="25%" height="25%">
+</div>
 
 * **Saiganesh H** - *Software Engineering Student* - [Saiganesh H](https://github.com/S-Depot/) - *TODO Android APP*
 
